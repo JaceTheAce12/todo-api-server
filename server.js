@@ -78,8 +78,7 @@ app.delete('/categories/:category', (req, res) => {
 
     todos.forEach(todo => {
         if (todo.category === category) {
-            todo.category = null; 
-            found = true;
+            delete todo.category;
         }
     });
 

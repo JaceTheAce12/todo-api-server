@@ -61,12 +61,10 @@ app.post('/categories', (req, res) => {
 app.put('/categories/:todoId/:category', (req, res) => {
     const category = req.params.category;
     const newCategory = req.body.newCategory;
-    let updated = false;
 
     todos.forEach(todo => {
         if (todo.category === category) {
             todo.category = newCategory;
-            updated = true;
         }
     });
 

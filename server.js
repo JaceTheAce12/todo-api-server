@@ -6,7 +6,7 @@ const todos = require('./modules/todos');
 app.use(express.json());
 
 app.get('/todos', (req, res) => {
-    res.json(todos);
+    res.send(todos);
 });
 
 app.post('/todos', (req, res) => {
@@ -18,7 +18,7 @@ app.post('/todos', (req, res) => {
         dueDate: req.body.dueDate
     };
     todos.push(newTodo);
-    res.json(newTodo);
+    res.send(newTodo);
 });
 
 app.put('/todos/:todoId', (req, res) => {
@@ -29,7 +29,7 @@ app.put('/todos/:todoId', (req, res) => {
     todo.todoComplete = req.body.todoComplete;
     todo.category = req.body.category;
     todo.dueDate = req.body.dueDate;
-    res.json(todo);
+    res.send(todo);
 });
 
 app.delete('/todos/:todoId', (req, res) => {
@@ -38,24 +38,24 @@ app.delete('/todos/:todoId', (req, res) => {
 
     if (todoIndex > -1) {
         const deletedTodo = todos.splice(todoIndex, 1);
-        res.json(deletedTodo);
+        res.send(deletedTodo);
     }
 });
 
 app.get('/todos/category/:category', (req, res) => {
     const category = req.params.category;
     const categoryTodos = todos.filter(todo => todo.category === category);
-    res.json(categoryTodos);
+    res.send(categoryTodos);
 });
 
 app.get('/categories', (req, res) => {
     const categories = [...new Set(todos.map(todo => todo.category))];  
-    res.json(categories);
+    res.send(categories);
 });
 
 app.post('/categories', (req, res) => {
     const category = req.body.category;
-    res.json(category);
+    res.send(category);
 });
 
 app.put('/categories/:todoId/:category', (req, res) => {
@@ -68,7 +68,7 @@ app.put('/categories/:todoId/:category', (req, res) => {
         }
     });
 
-    res.json(todos);
+    res.send(todos);
 });
 
 app.delete('/categories/:category', (req, res) => {
@@ -80,7 +80,7 @@ app.delete('/categories/:category', (req, res) => {
         }
     });
 
-    res.json(todos);
+    res.send(todos);
 });
 
 app.listen(port, () => {

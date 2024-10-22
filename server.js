@@ -61,14 +61,13 @@ app.post('/categories', (req, res) => {
 });
 
 app.put('/categories/:todoId/:category', (req, res) => {
-    const { todoId, categoryTitle } = req.params;
-    const { category } = req.body;
+    const todoId = parseInt(req.params.todoId);
+    const category = req.params.category;
+    const todo = todos.find(todo => todo.todoId === todoId && todo.category === category);
 
-    const todoIndex = todos.findIndex(todo => todo.todoId === todoId && todo.category === categoryTitle);
-
-    if (todoIndex !== -1) {
-        todos[todoIndex].category = category;
-        res.send(todos[todoIndex]);
+    if (todo) {
+        todo.category = req.body.newCategory;
+        res.send(todo);
     } else {
         res.send('Category not found');
     }
@@ -84,6 +83,18 @@ app.delete('/categories/:category', (req, res) => {
     });
 
     res.send(todos);
+});
+
+app.put('/todos/:todoId/:dueDate', (req, res) => {
+    const dueDate = req.params.dueDate;
+    const newDueDate = req.body.newDueDate;
+    const todosWithDueDate = todos.filter(todo => todo.dueDate === dueDate);
+
+    todosWithDueDate.forEach(todo => {
+        todo.dueDate = newDueDate;
+    });
+
+    res.send(todosWithDueDate);
 });
 
 app.listen(port, () => {

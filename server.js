@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = 3000;
 const todos = require('./modules/todos');
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/todos', (req, res) => {
     res.send(todos);
@@ -59,16 +61,17 @@ app.post('/categories', (req, res) => {
 });
 
 app.put('/categories/:todoId/:category', (req, res) => {
-    const category = req.params.category;
-    const newCategory = req.body.newCategory;
+    const { todoId, categoryTitle } = req.params;
+    const { category } = req.body;
 
-    todos.forEach(todo => {
-        if (todo.category === category) {
-            todo.category = newCategory;
-        }
-    });
+    const todoIndex = todos.findIndex(todo => todo.todoId === todoId && todo.category === categoryTitle);
 
-    res.send(todos);
+    if (todoIndex !== -1) {
+        todos[todoIndex].category = category;
+        res.send(todos[todoIndex]);
+    } else {
+        res.send('Category not found');
+    }
 });
 
 app.delete('/categories/:category', (req, res) => {
